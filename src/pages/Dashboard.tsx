@@ -34,7 +34,7 @@ const fetchRooms = useCallback(async () => {
 
 
   const resetRooms = async () => {
-    const res = await axios.post('http://localhost:5000/rooms/reset', {}, authHeaders);
+    const res = await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/reset', {}, authHeaders);
     if(res.status === 200){
         
     }
@@ -42,13 +42,13 @@ const fetchRooms = useCallback(async () => {
   };
 
   const randomOccupy = async () => {
-    await axios.post('http://localhost:5000/rooms/random', {}, authHeaders);
+    await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/random', {}, authHeaders);
     fetchRooms();
   };
 
   const bookRooms = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/rooms/book', { numRooms }, authHeaders);
+      const res = await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/book', { numRooms }, authHeaders);
       setMessage(`Booked Rooms: ${res.data.bookedRooms.map((r: Room) => r.number).join(', ')} | Travel Time: ${res.data.travelTime} mins`);
       fetchRooms();
     } catch (err: any) {

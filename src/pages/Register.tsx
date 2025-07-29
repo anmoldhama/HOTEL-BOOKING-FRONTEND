@@ -14,7 +14,7 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/session/register', {
+      await axios.post('https://hotel-booking-server-qrno.onrender.com/session/register', {
         fullName: { firstName, lastName },
         email,
         password,

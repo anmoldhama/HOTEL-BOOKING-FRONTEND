@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/session/login', { email, password }, { withCredentials: true });
+      const response = await axios.post('https://hotel-booking-server-qrno.onrender.com/session/login', { email, password }, { withCredentials: true });
       console.log(response.data);
       localStorage.setItem('token', response.data.token);
       navigate('/dashboard');
