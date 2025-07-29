@@ -1,5 +1,5 @@
 // src/pages/Dashboard.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback,useMemo } from 'react';
 import axios from 'axios';
 
 interface Room {
@@ -14,18 +14,24 @@ const Dashboard = () => {
   const [numRooms, setNumRooms] = useState(1);
   const [message, setMessage] = useState('');
 
-  const authHeaders = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
-    },
-    withCredentials: true
-  };
+const authHeaders = useMemo(() => ({
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  },
+  withCredentials: true
+}), []);
 
-  const fetchRooms = async () => {
+
+const fetchRooms = useCallback(async () => {
+  try {
     const res = await axios.get('http://localhost:5000/rooms', authHeaders);
     const data = Array.isArray(res.data) ? res.data : [];
     setRooms(data);
-  };
+  } catch (error) {
+    console.error("Failed to fetch rooms:", error);
+  }
+}, [authHeaders]);
+
 
   const resetRooms = async () => {
     const res = await axios.post('http://localhost:5000/rooms/reset', {}, authHeaders);
