@@ -52,7 +52,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchRooms();
-  }, []);
+  }, [fetchRooms]);
 
   return (
     <div className="p-8 min-h-screen bg-gray-100">
