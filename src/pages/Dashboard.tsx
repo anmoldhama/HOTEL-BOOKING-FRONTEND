@@ -25,7 +25,7 @@ const authHeaders = useMemo(() => ({
 const fetchRooms = useCallback(async () => {
   try {
     const res = await axios.get('https://hotel-booking-server-qrno.onrender.com/rooms', authHeaders);
-    const data = Array.isArray(res.data) ? res.data : [];
+    const data = Array.isArray(res.data?.data) ? res.data.data : [];
     setRooms(data);
   } catch (error) {
     console.error("Failed to fetch rooms:", error);
