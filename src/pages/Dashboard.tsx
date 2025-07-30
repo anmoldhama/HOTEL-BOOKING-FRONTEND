@@ -49,13 +49,19 @@ const resetRooms = async () => {
 
 const randomOccupy = async () => {
   try {
-    await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/random', {}, authHeaders);
+    const res = await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/random', {}, authHeaders);
+    const roomNumbers = res.data.bookedRooms.map((r: Room) => r.number).join(', ');
+    const travelTime = res.data.travelTime;
+    const msg = `Randomly Booked Rooms: ${roomNumbers} | Travel Time: ${travelTime} mins`;
+
+    setMessage(msg);
     toast.success("Rooms randomly occupied");
     fetchRooms();
   } catch (err) {
     toast.error("Failed to randomly occupy rooms");
   }
 };
+
 
 const bookRooms = async () => {
   try {
