@@ -1,6 +1,7 @@
 // src/pages/Dashboard.tsx
 import React, { useEffect, useState,useCallback,useMemo } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface Room {
   number: number;
@@ -27,34 +28,48 @@ const fetchRooms = useCallback(async () => {
     const res = await axios.get('https://hotel-booking-server-qrno.onrender.com/rooms', authHeaders);
     const data = Array.isArray(res.data?.data) ? res.data.data : [];
     setRooms(data);
+    toast.success("Fetched rooms successfully");
   } catch (error) {
     console.error("Failed to fetch rooms:", error);
+    toast.error("Failed to fetch rooms");
   }
 }, [authHeaders]);
 
-
-  const resetRooms = async () => {
+const resetRooms = async () => {
+  try {
     const res = await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/reset', {}, authHeaders);
-    if(res.status === 200){
-        
+    if (res.status === 200) {
+      toast.success("Rooms reset successfully");
     }
     fetchRooms();
-  };
+  } catch (err) {
+    toast.error("Failed to reset rooms");
+  }
+};
 
-  const randomOccupy = async () => {
+const randomOccupy = async () => {
+  try {
     await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/random', {}, authHeaders);
+    toast.success("Rooms randomly occupied");
     fetchRooms();
-  };
+  } catch (err) {
+    toast.error("Failed to randomly occupy rooms");
+  }
+};
 
-  const bookRooms = async () => {
-    try {
-      const res = await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/book', { numRooms }, authHeaders);
-      setMessage(`Booked Rooms: ${res.data.bookedRooms.map((r: Room) => r.number).join(', ')} | Travel Time: ${res.data.travelTime} mins`);
-      fetchRooms();
-    } catch (err: any) {
-      setMessage(err.response?.data?.error || 'Booking failed');
-    }
-  };
+const bookRooms = async () => {
+  try {
+    const res = await axios.post('https://hotel-booking-server-qrno.onrender.com/rooms/book', { numRooms }, authHeaders);
+    const msg = `Booked Rooms: ${res.data.bookedRooms.map((r: Room) => r.number).join(', ')} | Travel Time: ${res.data.travelTime} mins`;
+    setMessage(msg);
+    toast.success("Rooms booked successfully");
+    fetchRooms();
+  } catch (err: any) {
+    const errorMsg = err.response?.data?.error || 'Booking failed';
+    setMessage(errorMsg);
+    toast.error(errorMsg);
+  }
+};
 
   useEffect(() => {
     fetchRooms();
